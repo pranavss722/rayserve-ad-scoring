@@ -1,9 +1,0 @@
-ray[serve]
-xgboost
-scikit-learn
-pandas
-numpy
-prometheus-client
-fastapi
-uvicorn
-pytest
