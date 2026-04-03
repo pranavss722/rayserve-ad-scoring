@@ -1,0 +1,6 @@
+[deploy]
+startCommand = "ray start --head --disable-usage-stats && python -m app.main"
+
+[deploy.envs]
+PORT = "8000"
+PYTHONUNBUFFERED = "1"

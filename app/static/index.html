@@ -94,6 +94,7 @@
     padding: 24px 32px 16px;
     border-bottom: 1px solid #1a2040;
     text-align: center;
+    position: relative;
   }
 
   .header h1 {
@@ -102,6 +103,7 @@
     color: #f0c040;
     letter-spacing: 10px;
     margin-bottom: 4px;
+    font-weight: 700;
   }
 
   .header p {
@@ -110,6 +112,32 @@
     color: #5a6480;
     letter-spacing: 4px;
     text-transform: uppercase;
+  }
+
+  .live-indicator {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: #40c080;
+    letter-spacing: 2px;
+  }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    background: #40c080;
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(64, 192, 128, 0.6); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(64, 192, 128, 0); }
   }
 
   .stats-bar {
@@ -164,22 +192,27 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  .msg-user {
+    align-self: flex-end;
+  }
+
   .msg-user .msg-label {
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px;
-    color: #f0c040;
+    color: #0a0e1a;
     letter-spacing: 2px;
     margin-bottom: 6px;
+    text-align: right;
   }
 
   .msg-user .msg-body {
-    background: #141a30;
-    border: 1px solid #1e2850;
+    background: #f0c040;
+    color: #0a0e1a;
     border-radius: 8px;
     padding: 14px 18px;
     font-size: 14px;
     line-height: 1.6;
-    color: #d0d4e0;
+    font-weight: 600;
   }
 
   .msg-bot .msg-label {
@@ -193,6 +226,7 @@
   .msg-bot .msg-body {
     background: #0f1628;
     border: 1px solid #1a2545;
+    border-left: 3px solid #f0c040;
     border-radius: 8px;
     padding: 14px 18px;
     font-size: 14px;
@@ -312,6 +346,7 @@
     .chip-text { display: none; }
 
     .header h1 { font-size: 22px; letter-spacing: 6px; }
+    .live-indicator { top: 12px; right: 12px; }
     .chat { padding: 16px; }
     .input-area { padding: 12px 16px 16px; }
     .msg { max-width: 100%; }
@@ -327,13 +362,9 @@
     <span class="chip-icon">&#9917;</span>
     <div><span class="chip-label">PLAYERS</span><span class="chip-text">Who is the greatest footballer of all time and why?</span></div>
   </div>
-  <div class="chip" onclick="askQuestion('Which club has the most passionate fanbase?')">
+  <div class="chip" onclick="askQuestion('Which club has the most passionate fanbase in the world?')">
     <span class="chip-icon">&#127967;</span>
-    <div><span class="chip-label">CLUBS</span><span class="chip-text">Which club has the most passionate fanbase?</span></div>
-  </div>
-  <div class="chip" onclick="askQuestion('Which national team has the most complex football culture?')">
-    <span class="chip-icon">&#127758;</span>
-    <div><span class="chip-label">NATIONS</span><span class="chip-text">Which national team has the most complex football culture?</span></div>
+    <div><span class="chip-label">CLUBS</span><span class="chip-text">Which club has the most passionate fanbase in the world?</span></div>
   </div>
   <div class="chip" onclick="askQuestion('What is the hardest trophy to win in world football?')">
     <span class="chip-icon">&#127942;</span>
@@ -343,27 +374,20 @@
     <span class="chip-icon">&#129504;</span>
     <div><span class="chip-label">TACTICS</span><span class="chip-text">Explain gegenpressing and which managers use it best</span></div>
   </div>
-  <div class="chip" onclick="askQuestion('Who are the most influential football pundits worldwide?')">
-    <span class="chip-icon">&#127908;</span>
-    <div><span class="chip-label">MEDIA</span><span class="chip-text">Who are the most influential football pundits worldwide?</span></div>
-  </div>
-  <div class="chip" onclick="askQuestion('What was the most controversial transfer in football history?')">
-    <span class="chip-icon">&#128240;</span>
-    <div><span class="chip-label">TRANSFERS</span><span class="chip-text">What was the most controversial transfer in football history?</span></div>
-  </div>
   <div class="chip" onclick="askQuestion('Who is the greatest football manager of all time?')">
     <span class="chip-icon">&#128084;</span>
     <div><span class="chip-label">MANAGERS</span><span class="chip-text">Who is the greatest football manager of all time?</span></div>
   </div>
-  <div class="chip" onclick="askQuestion('Explain football culture and slang around the world')">
+  <div class="chip" onclick="askQuestion('Explain tiki-taka football philosophy')">
     <span class="chip-icon">&#128483;</span>
-    <div><span class="chip-label">CULTURE</span><span class="chip-text">Explain football culture and slang around the world</span></div>
+    <div><span class="chip-label">CULTURE</span><span class="chip-text">Explain tiki-taka football philosophy</span></div>
   </div>
 </aside>
 
 <!-- Main -->
 <div class="main">
   <div class="header">
+    <div class="live-indicator"><div class="live-dot"></div>LIVE</div>
     <h1>THE DUGOUT</h1>
     <p>Football Intelligence Platform</p>
     <div class="stats-bar">
@@ -403,7 +427,7 @@
 
   function askQuestion(q) {
     input.value = q;
-    input.focus();
+    send();
   }
 
   function addMsg(role, text, meta) {

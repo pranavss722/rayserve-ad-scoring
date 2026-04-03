@@ -1,0 +1,38 @@
+# Ray Serve declarative deployment configuration.
+#
+# Apply with:
+#   serve run config/serve_config.yaml
+#
+# See https://docs.ray.io/en/latest/serve/production-guide/config.html
+
+proxy_location: EveryNode
+
+applications:
+  - name: ad-scorer
+    route_prefix: /score
+    import_path: app.main:scorer_app
+    deployments:
+      - name: EnsembleScorer
+        num_replicas: 1
+        max_concurrent_queries: 20
+        autoscaling_config:
+          min_replicas: 1
+          max_replicas: 4
+          target_num_ongoing_requests_per_replica: 5
+        ray_actor_options:
+          num_cpus: 0.5
+
+      - name: XGBoostScorer
+        num_replicas: 2
+        max_concurrent_queries: 10
+        ray_actor_options:
+          num_cpus: 0.5
+
+  - name: ad-metrics
+    route_prefix: /metrics
+    import_path: app.main:metrics_app
+    deployments:
+      - name: MetricsEndpoint
+        num_replicas: 1
+        ray_actor_options:
+          num_cpus: 0.1
